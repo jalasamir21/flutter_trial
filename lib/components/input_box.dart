@@ -3,14 +3,16 @@ import 'package:flutter/material.dart';
 class InputBox extends StatelessWidget {
   final String textfield;
   final IconData icon;
+  final TextEditingController controller; // Added controller as a required parameter
 
-  InputBox(this.textfield, this.icon);
+  InputBox(this.textfield, this.icon, {required this.controller});
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       height: 50.0,
       child: TextFormField(
+        controller: controller, // Set the controller here
         style: const TextStyle(color: Colors.white), // Text color set to white
         decoration: InputDecoration(
           labelText: textfield,
