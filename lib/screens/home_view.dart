@@ -4,12 +4,16 @@ import 'package:trial/components/cards.dart';
 import 'package:trial/components/build_categories.dart';
 import 'package:trial/components/gradient_color.dart';
 import 'package:trial/components/build_categories.dart';
+import 'package:trial/components/search_bar.dart';
+
 import 'package:trial/components/place_details.dart';
 import 'package:trial/components/scrolls_view.dart';
+import 'package:trial/components/custom_search_bar_delegate.dart';
+import 'package:trial/screens/wishlist_page.dart';
+import 'package:trial/screens/user_profile.dart';
+import 'package:trial/screens/notifications_page.dart';
 
 class HomeView extends StatefulWidget {
-
-
   const HomeView({super.key});
   @override
   State<HomeView> createState() => _HomeViewState();
@@ -17,6 +21,15 @@ class HomeView extends StatefulWidget {
 
 class _HomeViewState extends State<HomeView> {
   int _selectedIndex = 0;
+
+  // List of pages corresponding to each BottomNavigationBar item
+  final List<Widget> _pages = [
+    HomePage(), // Your home content
+    LocationPage(), // Your location content
+    WishlistPage(), // Your favorites content
+    UserProfilePage(name: "Jala Samir",email: "jalasamir666@gmail.com",phone: "01098765431"),
+    // ProfilePage(),// Your profile content
+  ];
 
   void _onItemTapped(int index) {
     setState(() {
@@ -30,111 +43,9 @@ class _HomeViewState extends State<HomeView> {
       body: Stack(
         children: [
           GradientColor(),
-          Column(
-            children: [
-              SizedBox(width: 50),
-              SizedBox(height: 20),
-              Container(
-                margin: EdgeInsets.all(20.0),
-                alignment: Alignment.topLeft,
-                child: Text(
-                  "Location",
-                  style: TextStyle(
-                    color: Colors.grey,
-                    fontSize: 15,
-                  ),
-                ),
-              ),
-              Divider(
-                color: Colors.grey,
-                thickness: 0.8,
-                indent: 0,
-                endIndent: 0,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  Container(
-                      child: Row(
-                        children: [
-                          Icon(Icons.location_on, color: Colors.purple, size: 30),
-                          SizedBox(width: 5),
-                          Text("New York, USA",
-                              style: TextStyle(
-                                  color: Colors.grey,
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold)),
-                        ],
-                      )),
-                  SizedBox(width: 80),
-                  IconButton(
-                    onPressed: () {},
-                    icon: Icon(Icons.notification_add_rounded, color: Colors.purple, size: 30),
-
-                  )
-                ],
-              ),
-              SizedBox(height: 17),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  SizedBox(width: 20),
-                  Container(
-                      width: 310,
-                      decoration: BoxDecoration(
-                          color: Color(0xffffffff),
-                          border: Border.all(color: Color(0xFFD8D0D0), width: 1),
-                          borderRadius: BorderRadius.circular(25)),
-                      child: IconButton(
-                        alignment: Alignment.topLeft,
-                        onPressed: () {
-                          showSearch(
-                            context: context,
-                            delegate: CustomSearchDelegate(),
-                          );
-                        },
-                        icon: const Icon(Icons.search, color: Colors.purple),
-                      )),
-                  SizedBox(width: 5),
-                  Container(
-                    width: 50,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(12),
-                      color: Colors.purple,
-                    ),
-                    child: IconButton(
-                      onPressed: () {},
-                      iconSize: 32,
-                      icon: const Icon(Icons.filter_list),
-                    ),
-                  ),
-                  SizedBox(width: 20),
-                ],
-              ),
-              SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  Text("Categories",
-                      style: TextStyle(
-                          fontSize: 25,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.grey)),
-                  SizedBox(width: 60),
-                  InkWell(
-                    onTap: (){},
-                    child: Text("See All",
-                        style: TextStyle(fontSize: 18, color: Colors.grey)),
-                  ),
-                ],
-              ),
-
-              SizedBox(height: 20),
-              BuildCategories(),
-              ScrollsView(),
-              SizedBox(height:30),
-              PlaceDetails( countryName: "USA", rating: 5, description:"The United States of America, often referred to as the USA, is a vast and diverse country located in North America. Known for its iconic cities like New York, Los Angeles, the USA is home to a wide range of landscapes. ")
-            ],
+          IndexedStack(
+            index: _selectedIndex,  // Display the selected page
+            children: _pages,
           ),
         ],
       ),
@@ -156,7 +67,6 @@ class _HomeViewState extends State<HomeView> {
               icon: Icon(Icons.location_on),
               label: 'Location',
             ),
-
             BottomNavigationBarItem(
               icon: Icon(Icons.favorite_border),
               label: 'Favorites',
@@ -172,80 +82,132 @@ class _HomeViewState extends State<HomeView> {
   }
 }
 
+// Separate pages for each tab in BottomNavigationBar
+class HomePage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        SizedBox(width: 50),
+        SizedBox(height: 20),
+        Container(
+          margin: EdgeInsets.all(20.0),
+          alignment: Alignment.topLeft,
+          child: Text(
+            "Location",
+            style: TextStyle(
+              color: Colors.grey,
+              fontSize: 15,
+            ),
+          ),
+        ),
+        Divider(
+          color: Colors.grey,
+          thickness: 0.8,
+          indent: 0,
+          endIndent: 0,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            Container(
+                child: Row(
+                  children: [
+                    Icon(Icons.location_on, color: Colors.purple, size: 30),
+                    SizedBox(width: 5),
+                    Text("New York, USA",
+                        style: TextStyle(
+                            color: Colors.grey,
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold)),
+                  ],
+                )),
+            SizedBox(width: 80),
+            IconButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => NotificationsPage()),
+                );
 
-class CustomSearchDelegate extends SearchDelegate {
-  List<String> searchTerms=[
-    'Canada',
-    'Usa',
-    'Germany',
-    'France',
-    'Japan',
-    'United Kingdom',
-    'Australia',
-    'Egypt',
-    'China',
-    'India',
-    'Indonesia',
-    'Philippines',
-    'Thailand',
-  ];
-  @override
-  List<Widget> buildActions(BuildContext context) {
-    return [
-      IconButton(
-        icon: const Icon(Icons.clear, color:Colors.purple),
-        onPressed: (){
-          query ='';
-        },
-      ),
-    ];
-  }
-  @override
-  Widget buildLeading(BuildContext context) {
-    return IconButton(
-      icon: const Icon(Icons.arrow_back, color: Colors.purple,),
-      onPressed: () {
-        close(context, null);
-      },
+              },
+              icon: Icon(Icons.notification_add_rounded,
+                  color: Colors.purple, size: 30),
+            )
+          ],
+        ),
+        SizedBox(height: 10),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            SizedBox(width: 15),
+
+            const CustomSearchBar(),
+
+            Container(
+              width: 50,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(12),
+                color: Colors.purple,
+              ),
+              child: IconButton(
+                onPressed: () {},
+                iconSize: 32,
+                icon: const Icon(Icons.filter_list),
+              ),
+            ),
+            SizedBox(width: 11),
+          ],
+        ),
+        SizedBox(height: 20),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            Text("Categories",
+                style: TextStyle(
+                    fontSize: 25,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.grey)),
+            SizedBox(width: 60),
+            InkWell(
+              onTap: () {},
+              child: Text("See All",
+                  style: TextStyle(fontSize: 18, color: Colors.grey)),
+            ),
+          ],
+        ),
+        SizedBox(height: 20),
+        BuildCategories(),
+        ScrollsView(),
+        SizedBox(height: 30),
+        PlaceDetails(
+            countryName: "USA",
+            rating: 5,
+            description:
+            "The United States of America, often referred to as the USA, is a vast and diverse country located in North America. Known for its iconic cities like New York, Los Angeles, the USA is home to a wide range of landscapes. "),
+      ],
     );
   }
+}
 
+class LocationPage extends StatelessWidget {
   @override
-  Widget buildResults(BuildContext context) {
-    List<String> matchQuery = [];
-    for(var item in searchTerms){
-      if(item.toLowerCase().contains(query.toLowerCase())){
-        matchQuery.add(item);
-      }
-    }
-    return ListView.builder(
-      itemCount: matchQuery.length,
-      itemBuilder: (context, index) {
-        var result = matchQuery[index];
-        return ListTile(
-          title: Text(result),
-        );
-      },
-    );
+  Widget build(BuildContext context) {
+    return Center(child: Text("Location Page"));
   }
-  @override
-  Widget buildSuggestions(BuildContext context) {
-    List<String> matchQuery = [];
-    for(var item in searchTerms){
-      if(item.toLowerCase().contains(query.toLowerCase())){
-        matchQuery.add(item);
-      }
-    }
-    return ListView.builder(
-      itemCount: matchQuery.length,
-      itemBuilder: (context, index) {
-        var result = matchQuery[index];
-        return ListTile(
-          title: Text(result),
-        );
-      },
-    );
-  }
-  }
+}
 
+class FavoritesPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Center(child: Text("Favorites Page"));
+  }
+}
+
+class ProfilePage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Center(child: Text("Profile Page"));
+  }
+}
 

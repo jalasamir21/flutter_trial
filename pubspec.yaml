@@ -63,6 +63,10 @@ flutter:
     - assets/images/hotel3.jpeg
     - assets/images/hotel4.jpeg
     - assets/images/hotel5.png
+    - assets/images/th.jpg
+    - assets/images/th (1).jpg
+    - assets/images/th (2).jpg
+    - assets/images/tokyo.jpg
 
 
   # The following line ensures that the Material Icons font is
